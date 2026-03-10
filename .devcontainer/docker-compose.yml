@@ -1,75 +1,49 @@
 # .devcontainer/docker-compose.yml
-version: "3.8"
+version: "3.9"
 
 services:
   app:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
     volumes:
-      - ../..:/workspace:cached
-      - vscode-extensions:/home/vscode/.vscode-server/extensions
-      - node-modules:/workspace/node_modules
+      - ..:/workspace:cached
     command: sleep infinity
-    networks:
-      - dev-network
+    environment:
+      DATABASE_URL: postgresql://dev:dev@db:5432/dev
+      REDIS_URL: redis://redis:6379/0
     depends_on:
       db:
         condition: service_healthy
       redis:
         condition: service_healthy
-    cap_add:
-      - SYS_PTRACE
-    security_opt:
-      - seccomp:unconfined
+    networks:
+      - devnet
 
   db:
     image: postgres:16-alpine
-    restart: unless-stopped
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: devuser
-      POSTGRES_PASSWORD: devpassword
-      POSTGRES_DB: devdb
-    ports:
-      - "5432:5432"
-    networks:
-      - dev-network
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: dev
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U devuser -d devdb"]
+      test: ["CMD-SHELL", "pg_isready -U dev -d dev"]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - devnet
 
   redis:
     image: redis:7-alpine
-    restart: unless-stopped
-    ports:
-      - "6379:6379"
-    networks:
-      - dev-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 5
-
-  adminer:
-    image: adminer:latest
-    restart: unless-stopped
-    ports:
-      - "8080:8080"
     networks:
-      - dev-network
-    depends_on:
-      - db
-
-volumes:
-  postgres-data:
-  vscode-extensions:
-  node-modules:
+      - devnet
 
 networks:
-  dev-network:
+  devnet:
     driver: bridge
