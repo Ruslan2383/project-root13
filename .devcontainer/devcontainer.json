@@ -1,0 +1,207 @@
+// .devcontainer/devcontainer.json
+{
+  "name": "Production Workspace",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+
+  // ═══════════════════════════════════════════
+  // 🔧 FEATURES — автоматическая установка инструментов
+  // ═══════════════════════════════════════════
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": { "ppa": true },
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "moby": true
+    },
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" },
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.12" },
+    "ghcr.io/devcontainers/features/go:1": { "version": "latest" },
+    "ghcr.io/devcontainers/features/rust:1": { "version": "latest" },
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "kubectl": "latest",
+      "helm": "latest",
+      "minikube": "none"
+    },
+    "ghcr.io/devcontainers/features/terraform:1": { "version": "latest" },
+    "ghcr.io/devcontainers/features/aws-cli:1": {}
+  },
+
+  // ═══════════════════════════════════════════
+  // 📦 РАСШИРЕНИЯ VS CODE — авто-установка
+  // ═══════════════════════════════════════════
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        // === Форматирование & Линтинг ===
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "stylelint.vscode-stylelint",
+        "editorconfig.editorconfig",
+        "foxundermoon.shell-format",
+
+        // === Python ===
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "ms-python.black-formatter",
+
+        // === Go ===
+        "golang.go",
+
+        // === Rust ===
+        "rust-lang.rust-analyzer",
+
+        // === Docker & DevOps ===
+        "ms-azuretools.vscode-docker",
+        "ms-kubernetes-tools.vscode-kubernetes-tools",
+        "hashicorp.terraform",
+        "redhat.vscode-yaml",
+
+        // === Базы данных ===
+        "mtxr.sqltools",
+        "mtxr.sqltools-driver-pg",
+        "mongodb.mongodb-vscode",
+
+        // === Git ===
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+
+        // === Утилиты ===
+        "streetsidesoftware.code-spell-checker",
+        "gruntfuggly.todo-tree",
+        "usernamehw.errorlens",
+        "christian-kohler.path-intellisense",
+        "mikestead.dotenv",
+        "ms-toolsai.jupyter"
+      ],
+
+      // ═══════════════════════════════════════
+      // ⚙️ НАСТРОЙКИ ФОРМАТИРОВАНИЯ — все языки
+      // ═══════════════════════════════════════
+      "settings": {
+        // --- Глобальные ---
+        "editor.formatOnSave": true,
+        "editor.formatOnPaste": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "explicit",
+          "source.organizeImports": "explicit"
+        },
+        "files.trimTrailingWhitespace": true,
+        "files.insertFinalNewline": true,
+        "files.trimFinalNewlines": true,
+
+        // --- JavaScript / TypeScript ---
+        "[javascript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescript]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[javascriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[typescriptreact]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+
+        // --- Python ---
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
+          }
+        },
+        "python.analysis.typeCheckingMode": "basic",
+
+        // --- Go ---
+        "[go]": {
+          "editor.defaultFormatter": "golang.go"
+        },
+        "go.useLanguageServer": true,
+        "go.lintTool": "golangci-lint",
+        "go.lintOnSave": "package",
+
+        // --- Rust ---
+        "[rust]": {
+          "editor.defaultFormatter": "rust-lang.rust-analyzer"
+        },
+
+        // --- JSON / YAML / Markdown ---
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[yaml]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[markdown]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+
+        // --- HTML / CSS ---
+        "[html]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[css]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+        "[scss]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode"
+        },
+
+        // --- Shell ---
+        "[shellscript]": {
+          "editor.defaultFormatter": "foxundermoon.shell-format"
+        },
+
+        // --- Dockerfile ---
+        "[dockerfile]": {
+          "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+        },
+
+        // --- Terraform ---
+        "[terraform]": {
+          "editor.defaultFormatter": "hashicorp.terraform",
+          "editor.formatOnSave": true
+        },
+
+        // --- Docker & Terminal ---
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "remote.autoForwardPorts": true
+      }
+    }
+  },
+
+  // ═══════════════════════════════════════════
+  // 🔄 LIFECYCLE — автоматизация при создании/запуске
+  // ═══════════════════════════════════════════
+  "onCreateCommand": ".devcontainer/scripts/post-create.sh",
+  "postStartCommand": ".devcontainer/scripts/post-start.sh",
+  "postAttachCommand": "echo '🚀 Workspace ready!'",
+
+  // ═══════════════════════════════════════════
+  // 🌐 ПОРТЫ & ПЕРЕМЕННЫЕ
+  // ═══════════════════════════════════════════
+  "forwardPorts": [3000, 5173, 8000, 8080, 5432, 6379, 27017],
+
+  "containerEnv": {
+    "NODE_ENV": "development",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "DATABASE_URL": "postgresql://devuser:devpassword@db:5432/devdb",
+    "REDIS_URL": "redis://redis:6379"
+  },
+
+  "remoteEnv": {
+    "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}",
+    "AWS_ACCESS_KEY_ID": "${localEnv:AWS_ACCESS_KEY_ID}",
+    "AWS_SECRET_ACCESS_KEY": "${localEnv:AWS_SECRET_ACCESS_KEY}"
+  },
+
+  "remoteUser": "vscode"
+}
